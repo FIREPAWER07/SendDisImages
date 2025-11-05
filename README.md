@@ -61,7 +61,7 @@ Get the latest version from the **[Releases](https://github.com/FIREPAWER07/Send
 
 ## 💡 Usage
 1. Open **SendDisImages**.  
-2. Enter your **Discord Bot Token** (it’s saved securely for next time).  
+2. Enter your [**Discord Bot Token**](https://discord.com/developers/applications) (it’s saved securely for next time).  
 3. Select the **Channel**.  
 4. Toggle **Nitro Mode** as needed.  
 5. Select one or multiple images.  
