@@ -2,7 +2,7 @@ import { invoke } from "@tauri-apps/api/core"
 import { open } from "@tauri-apps/plugin-dialog"
 import { getCurrentWebviewWindow } from "@tauri-apps/api/webviewWindow"
 import { join, tempDir } from "@tauri-apps/api/path"
-import { writeFile, mkdir } from "@tauri-apps/plugin-fs"
+import { writeFile, mkdir, readFile } from "@tauri-apps/plugin-fs"
 
 interface SendImagesRequest {
   token: string
@@ -60,7 +60,7 @@ class App {
   private channelModal: HTMLElement
   private closeModalBtn: HTMLButtonElement
   private guildsContainer: HTMLElement
-
+  private objectUrls: string[] = []
   private selectedFiles: string[] = []
   private currentToken = ""
   private currentChannelId = ""
@@ -141,11 +141,25 @@ class App {
 
       e.preventDefault()
 
+      const pastedFiles: File[] = []
       for (const item of imageItems) {
         const blob = item.getAsFile()
         if (blob) {
-          await this.handlePastedImage(blob)
+          pastedFiles.push(blob)
         }
+      }
+
+      // Process all pasted images
+      for (const blob of pastedFiles) {
+        await this.handlePastedImage(blob)
+      }
+
+      // Update UI after all images are processed
+      this.renderSelectedFiles()
+      this.sendSection.style.display = "block"
+
+      if (pastedFiles.length > 1) {
+        this.showStatus(`Pasted ${pastedFiles.length} images`, "success")
       }
     })
   }
@@ -157,11 +171,23 @@ class App {
         extension = "jpg"
       } else if (blob.type === "image/png") {
         extension = "png"
+      } else if (blob.type === "image/gif") {
+        extension = "gif"
+      } else if (blob.type === "image/webp") {
+        extension = "webp"
       }
 
-      this.pastedImageCounter++
-      const timestamp = Date.now()
-      const filename = `pasted-image-${timestamp}-${this.pastedImageCounter}.${extension}`
+      // Use original filename if available, otherwise generate one
+      let filename: string
+      if (blob.name && blob.name !== "image.png" && blob.name !== "blob") {
+        // Use original filename
+        filename = blob.name
+      } else {
+        // Generate a filename if original name is not available or generic
+        this.pastedImageCounter++
+        const timestamp = Date.now()
+        filename = `pasted-image-${timestamp}-${this.pastedImageCounter}.${extension}`
+      }
 
       const tempDirPath = await tempDir()
       const appTempDir = await join(tempDirPath, "senddisimages")
@@ -180,9 +206,11 @@ class App {
       await writeFile(filePath, uint8Array)
 
       this.selectedFiles.push(filePath)
-      this.renderSelectedFiles()
-      this.sendSection.style.display = "block"
-      this.showStatus(`Pasted image added: ${filename}`, "success")
+      
+      // Only show individual status for single images (batch message shown in setupPasteHandler)
+      if (this.selectedFiles.length === 1) {
+        this.showStatus(`Pasted image added: ${filename}`, "success")
+      }
     } catch (error) {
       console.error("Failed to handle pasted image:", error)
       this.showStatus(`Failed to paste image: ${error}`, "error")
@@ -316,29 +344,81 @@ class App {
     }
   }
 
-  private renderSelectedFiles() {
+  private async renderSelectedFiles() {
     if (this.selectedFiles.length === 0) {
-      this.selectedFilesDiv.innerHTML = '<p class="help-text">No images selected</p>'
-      this.sendSection.style.display = "none"
-      return
-    }
+    this.selectedFilesDiv.querySelectorAll(".remove-file").forEach((btn) => {
+      btn.addEventListener("click", (e) => {
+        const index = Number.parseInt((e.currentTarget as HTMLElement).dataset.index || "0")
+        this.removeFile(index)
+      })
+    })
+  }
 
-    this.selectedFilesDiv.innerHTML = this.selectedFiles
-      .map((file, index) => {
-        const fileName = file.split(/[\\/]/).pop() || file
-        return `
-          <div class="file-item">
-            <span class="file-name" title="${file}">${fileName}</span>
-            <button class="remove-file" data-index="${index}">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <line x1="18" y1="6" x2="6" y2="18"></line>
-                <line x1="6" y1="6" x2="18" y2="18"></line>
-              </svg>
-            </button>
+    // Clear previous object URLs to prevent memory leaks
+    this.cleanupObjectUrls()
+
+    let html = ''
+    
+    for (let i = 0; i < this.selectedFiles.length; i++) {
+      const file = this.selectedFiles[i]
+      const fileName = file.split(/[\\/]/).pop() || file
+      
+      try {
+        // Read the file as binary data
+        const fileData = await readFile(file)
+        
+        // Create a blob and object URL
+        const blob = new Blob([fileData])
+        const objectUrl = URL.createObjectURL(blob)
+        this.objectUrls.push(objectUrl)
+        
+        html += `
+          <div class="file-item-preview">
+            <div class="file-preview-header">
+              <span class="file-name" title="${file}">${fileName}</span>
+              <button class="remove-file" data-index="${i}">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                  <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+              </button>
+            </div>
+            <div class="file-preview-container">
+              <img class="file-preview-image" src="${objectUrl}" alt="${fileName}" />
+            </div>
           </div>
         `
-      })
-      .join("")
+      } catch (error) {
+        console.error('Failed to load image preview:', error)
+        // Fallback to placeholder if we can't read the file
+        html += `
+          <div class="file-item-preview">
+            <div class="file-preview-header">
+              <span class="file-name" title="${file}">${fileName}</span>
+              <button class="remove-file" data-index="${i}">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                  <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+              </button>
+            </div>
+            <div class="file-preview-container">
+              <div class="preview-placeholder">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                  <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                  <polyline points="21 15 16 10 5 21"></polyline>
+                </svg>
+                <p>${fileName}</p>
+                <small>Failed to load preview</small>
+              </div>
+            </div>
+          </div>
+        `
+      }
+    }
+
+    this.selectedFilesDiv.innerHTML = html
 
     this.selectedFilesDiv.querySelectorAll(".remove-file").forEach((btn) => {
       btn.addEventListener("click", (e) => {
@@ -347,6 +427,23 @@ class App {
         this.renderSelectedFiles()
       })
     })
+  }
+
+  private cleanupObjectUrls() {
+    // Clean up previous object URLs to prevent memory leaks
+    this.objectUrls.forEach(url => URL.revokeObjectURL(url))
+    this.objectUrls = []
+  }
+
+  // Update the remove file handler to also clean up
+  private async removeFile(index: number) {
+    // Revoke the object URL for this file if it exists
+    if (this.objectUrls[index]) {
+      URL.revokeObjectURL(this.objectUrls[index])
+      this.objectUrls.splice(index, 1)
+    }
+    this.selectedFiles.splice(index, 1)
+    await this.renderSelectedFiles()
   }
 
   private async openChannelBrowser() {
@@ -411,18 +508,17 @@ class App {
               <span class="channel-count">${textChannels.length} channels</span>
             </div>
             <div class="channels-list">
-              ${textChannels
-                .map(
-                  (channel) => `
-                <button class="channel-item" data-channel-id="${channel.id}" data-channel-name="${this.escapeHtml(channel.name)}" data-guild-name="${this.escapeHtml(guild.name)}">
+              ${textChannels.map((channel) => `
+                <button class="channel-item" 
+                        data-channel-id="${channel.id}" 
+                        data-channel-name="${this.escapeHtml(channel.name)}" 
+                        data-guild-name="${this.escapeHtml(guild.name)}">
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
                   </svg>
                   ${this.escapeHtml(channel.name)}
                 </button>
-              `,
-                )
-                .join("")}
+              `).join('')}
             </div>
           </div>
         `

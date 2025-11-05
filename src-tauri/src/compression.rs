@@ -69,6 +69,7 @@ pub async fn process_image(path: &Path, max_size: usize) -> Result<PathBuf> {
 async fn compress_jpeg(input: &Path, output: &Path, max_size: usize) -> Result<()> {
     let img_data = fs::read(input).await?;
     let img = image::load_from_memory(&img_data)?;
+    let original_len: usize = img_data.len();
 
     // Try different quality levels
     for quality in (60..=95).rev().step_by(5) {
@@ -81,12 +82,13 @@ async fn compress_jpeg(input: &Path, output: &Path, max_size: usize) -> Result<(
     }
 
     // If still too large, try resizing
-    let img_len = img_data.len() as f64;
-    let scale_factor = ((max_size as f64) / img_len).sqrt();
+    let original_len_f64 = original_len as f64;
+    let max_size_f64 = max_size as f64;
+    let scale_factor = (max_size_f64 / original_len_f64).sqrt();
     let img_width: u32 = img.width();
     let img_height: u32 = img.height();
-    let new_width = ((img_width as f64) * scale_factor) as u32;
-    let new_height = ((img_height as f64) * scale_factor) as u32;
+    let new_width = (img_width as f64 * scale_factor) as u32;
+    let new_height = (img_height as f64 * scale_factor) as u32;
 
     let resized = img.resize(new_width, new_height, image::imageops::FilterType::Lanczos3);
     let compressed = compress_jpeg_with_quality(&resized, 85)?;
@@ -111,6 +113,7 @@ fn compress_jpeg_with_quality(img: &DynamicImage, quality: u8) -> Result<Vec<u8>
 
 async fn compress_png(input: &Path, output: &Path, max_size: usize) -> Result<()> {
     let img_data = fs::read(input).await?;
+    let original_len: usize = img_data.len();
 
     // Try oxipng optimization first
     let options = oxipng::Options {
@@ -132,12 +135,13 @@ async fn compress_png(input: &Path, output: &Path, max_size: usize) -> Result<()
 
     // If still too large, resize and try again
     let img = image::load_from_memory(&img_data)?;
-    let img_len = img_data.len() as f64;
-    let scale_factor = ((max_size as f64) / img_len).sqrt();
+    let original_len_f64 = original_len as f64;
+    let max_size_f64 = max_size as f64;
+    let scale_factor = (max_size_f64 / original_len_f64).sqrt();
     let img_width: u32 = img.width();
     let img_height: u32 = img.height();
-    let new_width = ((img_width as f64) * scale_factor) as u32;
-    let new_height = ((img_height as f64) * scale_factor) as u32;
+    let new_width = (img_width as f64 * scale_factor) as u32;
+    let new_height = (img_height as f64 * scale_factor) as u32;
 
     let resized = img.resize(new_width, new_height, image::imageops::FilterType::Lanczos3);
 

@@ -9,8 +9,12 @@
   <body>
     <div id="app">
       <header class="app-header">
+        <!-- Added logo image to header -->
+        <div class="header-logo">
+          <img src="/src/assets/Logo.png" alt="SendDisImages Logo" class="logo-image" />
+        </div>
         <h1>SendDisImages</h1>
-        <p class="subtitle">Local Discord Image Sender</p>
+        <p class="subtitle">Select. Compress. Send!</p>
       </header>
 
       <main class="container">
@@ -107,7 +111,7 @@
               Browse Files
             </button>
             <!-- Added paste instruction -->
-            <p class="drop-help">Supports PNG, JPG, JPEG • Press Ctrl-V to paste from clipboard</p>
+            <p class="drop-help">Supports PNG, JPG, JPEG • Press Ctrl+V to paste from clipboard</p>
           </div>
           <div id="selected-files" class="selected-files"></div>
         </section>

@@ -43,6 +43,18 @@ body {
   text-align: center;
 }
 
+.header-logo {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.logo-image {
+  height: 48px;
+  width: auto;
+  object-fit: contain;
+}
+
 .app-header h1 {
   font-size: 1.75rem;
   font-weight: 700;
@@ -210,6 +222,54 @@ input[type="password"]:focus {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+}
+
+.file-item-preview {
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.file-preview-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-secondary);
+}
+
+.file-preview-header .file-name {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-right: 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.file-preview-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background: var(--bg-primary);
+  min-height: 100px;
+  max-height: 300px;
+  overflow: hidden;
+}
+
+.file-preview-image {
+  max-width: 100%;
+  max-height: 280px;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  border-radius: 4px;
 }
 
 .file-item {
@@ -604,4 +664,87 @@ input[type="password"]:focus {
   .btn-sm {
     width: 100%;
   }
+}
+@media (max-width: 640px) {
+  .container {
+    padding: 1rem;
+  }
+
+  .card {
+    padding: 1rem;
+  }
+
+  .input-group {
+    flex-direction: column;
+  }
+
+  .input-group input {
+    min-width: 100%;
+  }
+
+  .btn {
+    width: 100%;
+  }
+}
+.file-preview-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background: var(--bg-primary);
+  min-height: 100px;
+  max-height: 300px;
+  overflow: hidden;
+}
+
+.file-preview-image {
+  max-width: 100%;
+  max-height: 280px;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  border-radius: 4px;
+}
+
+.preview-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  color: var(--text-secondary);
+  text-align: center;
+}
+
+.preview-placeholder svg {
+  margin-bottom: 0.5rem;
+}
+
+.preview-placeholder p {
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
+  word-break: break-all;
+  max-width: 100%;
+}
+.file-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  margin-bottom: 0.5rem;
+}
+
+.file-item:last-child {
+  margin-bottom: 0;
+}
+
+.file-name {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-right: 1rem;
 }

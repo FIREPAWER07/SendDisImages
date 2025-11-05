@@ -7,8 +7,10 @@
   ],
   "permissions": [
     "core:default",
-    "opener:default",
     "dialog:default",
-    "fs:default"
+    "fs:default",
+    "fs:allow-temp-write-recursive",
+    "fs:allow-temp-read-recursive",
+    "store:default"
   ]
 }
