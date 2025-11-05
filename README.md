@@ -14,7 +14,7 @@ A **modern, lightweight, and efficient Discord Bot GUI** built with [Tauri](http
 
 > ⚠ **Disclaimer:**  
 > This project is **not affiliated, associated, or endorsed by Discord** in any way.  
-> The developer (**FIREPAWER07**) is **not responsible for any misuse, violations, or damages** caused by the use of this application.  
+> The developer (**FIREPAWER07**) is **not responsible for any misuse** caused by the use of this application.  
 > Use responsibly and in accordance with Discord’s [Terms of Service](https://discord.com/terms) and [Developer Policies](https://discord.com/developers/docs/policies-and-agreements).
 
 ---
