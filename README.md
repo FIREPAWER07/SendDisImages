@@ -1,6 +1,6 @@
 # 🖼️ SendDisImages (By [FIREPAWER07](https://github.com/FIREPAWER07)) 🖼️
 
-[![SendDisImages Banner](https://i.imgur.com/ULSPmhQ.png)](https://github.com/FIREPAWER07/SendDisImages/releases/latest)
+[![SendDisImages Banner](https://i.imgur.com/VYjLINJ.png)](https://github.com/FIREPAWER07/SendDisImages/releases/latest)
 
 [![GitHub release](https://img.shields.io/github/release/FIREPAWER07/SendDisImages.svg)](https://github.com/FIREPAWER07/SendDisImages/releases/latest)
 [![GitHub issues](https://img.shields.io/github/issues/FIREPAWER07/SendDisImages.svg)](https://github.com/FIREPAWER07/SendDisImages/issues)
