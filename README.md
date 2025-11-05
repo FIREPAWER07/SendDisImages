@@ -120,18 +120,39 @@ If you like my work and want to help me keep developing projects like this:
 
 ---
 
-## ⚙️ Other Projects by Me
-### 🎵 [Spicetify Installer](https://github.com/FIREPAWER07/SpicetifyInstaller)
+## ⚙️ Other Projects I've Made  
+
+### 🎵 Spicetify Installer  
+
 <table>
   <tr>
     <td width="200">
       <a href="https://github.com/FIREPAWER07/SpicetifyInstaller">
-        <img src="https://i.imgur.com/aVn70EB.png" alt="Spicetify Installer Banner" width="180">
+        <img src="https://i.imgur.com/UYvcaSa.png" alt="Spicetify Logo" width="180">
       </a>
     </td>
     <td>
-      A Tauri-based **Spicetify Installer** for seamless Spotify customization — simple, safe, and fast.<br><br>
-      🔗 <a href="https://github.com/FIREPAWER07/SpicetifyInstaller">View Repository</a>
+      A clean and simple installer for Spicetify, making it easier than ever to customize your Spotify experience.  
+      <br><br>
+      🔗 <a href="https://github.com/FIREPAWER07/SpicetifyInstaller">Check it out here</a>
+    </td>
+  </tr>
+</table>
+
+### 🔥 OmniKinkList  
+
+<table>
+  <tr>
+    <td width="200">
+      <a href="https://github.com/FIREPAWER07/OmniKinkList">
+        <img src="https://i.imgur.com/aTl3wv5.png" alt="OmniKinkList Logo" width="180">
+      </a>
+    </td>
+    <td>
+      A modern, interactive web app designed for degenerates who want to explore, track, and share their personal preferences—with style, efficiency, and full customization.  
+      <br><br>
+      🔗 <a href="https://github.com/FIREPAWER07/OmniKinkList">Check it out here!</a>
+      🔗 <a href="https://FIREPAWER07.github.io/OmniKinkList/">Check the Live Demo!</a>
     </td>
   </tr>
 </table>
