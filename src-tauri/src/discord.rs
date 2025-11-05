@@ -44,7 +44,7 @@ impl DiscordClient {
 
         for guild in guilds {
             let guild_id = GuildId::new(guild.id.get());
-            
+
             // Get channels for this guild
             let channels = match self.http.get_channels(guild_id).await {
                 Ok(channels) => channels

@@ -1,6 +1,8 @@
 import { invoke } from "@tauri-apps/api/core"
 import { open } from "@tauri-apps/plugin-dialog"
 import { getCurrentWebviewWindow } from "@tauri-apps/api/webviewWindow"
+import { join, tempDir } from "@tauri-apps/api/path"
+import { writeFile, mkdir } from "@tauri-apps/plugin-fs"
 
 interface SendImagesRequest {
   token: string
@@ -64,6 +66,7 @@ class App {
   private currentChannelId = ""
   private currentChannelName = ""
   private currentGuildName = ""
+  private pastedImageCounter = 0
 
   constructor() {
     this.tokenInput = document.getElementById("token-input") as HTMLInputElement
@@ -96,6 +99,7 @@ class App {
     await this.loadSavedChannel()
     this.attachEventListeners()
     this.setupTauriDragAndDrop()
+    this.setupPasteHandler()
   }
 
   private attachEventListeners() {
@@ -107,12 +111,82 @@ class App {
     this.changeChannelBtn.addEventListener("click", () => this.openChannelBrowser())
     this.closeModalBtn.addEventListener("click", () => this.closeChannelBrowser())
 
-    // Close modal when clicking outside
     this.channelModal.addEventListener("click", (e) => {
       if (e.target === this.channelModal) {
         this.closeChannelBrowser()
       }
     })
+  }
+
+  private setupPasteHandler() {
+    document.addEventListener("paste", async (e) => {
+      const target = e.target as HTMLElement
+      if (target.tagName === "INPUT" || target.tagName === "TEXTAREA") {
+        return
+      }
+
+      const items = e.clipboardData?.items
+      if (!items) return
+
+      const imageItems: DataTransferItem[] = []
+      for (let i = 0; i < items.length; i++) {
+        if (items[i].type.startsWith("image/")) {
+          imageItems.push(items[i])
+        }
+      }
+
+      if (imageItems.length === 0) {
+        return
+      }
+
+      e.preventDefault()
+
+      for (const item of imageItems) {
+        const blob = item.getAsFile()
+        if (blob) {
+          await this.handlePastedImage(blob)
+        }
+      }
+    })
+  }
+
+  private async handlePastedImage(blob: File) {
+    try {
+      let extension = "png"
+      if (blob.type === "image/jpeg") {
+        extension = "jpg"
+      } else if (blob.type === "image/png") {
+        extension = "png"
+      }
+
+      this.pastedImageCounter++
+      const timestamp = Date.now()
+      const filename = `pasted-image-${timestamp}-${this.pastedImageCounter}.${extension}`
+
+      const tempDirPath = await tempDir()
+      const appTempDir = await join(tempDirPath, "senddisimages")
+
+      try {
+        await mkdir(appTempDir, { recursive: true })
+      } catch (error) {
+        // Directory might already exist, ignore error
+      }
+
+      const filePath = await join(appTempDir, filename)
+
+      const arrayBuffer = await blob.arrayBuffer()
+      const uint8Array = new Uint8Array(arrayBuffer)
+
+      await writeFile(filePath, uint8Array)
+
+      this.selectedFiles.push(filePath)
+      this.renderSelectedFiles()
+      this.sendSection.style.display = "block"
+      this.showStatus(`Pasted image added: ${filename}`, "success")
+    } catch (error) {
+      console.error("Failed to handle pasted image:", error)
+      this.showStatus(`Failed to paste image: ${error}`, "error")
+    }
   }
 
   private setupTauriDragAndDrop() {
@@ -355,7 +429,6 @@ class App {
       })
       .join("")
 
-    // Attach click handlers to channel items
     this.guildsContainer.querySelectorAll(".channel-item").forEach((btn) => {
       btn.addEventListener("click", (e) => {
         const target = e.currentTarget as HTMLElement
