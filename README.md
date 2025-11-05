@@ -85,15 +85,10 @@ Get the latest version from the **[Releases](https://github.com/FIREPAWER07/Send
 
 ---
 
-## 🖼 Screenshots
-*(Coming soon!)*
-
----
-
 ## 🤝 Contributing
-Want to help? Contributions are always welcome!  
-- Open an issue → [GitHub Issues](https://github.com/FIREPAWER07/SendDisImages/issues)  
-- Submit a Pull Request to improve features, fix bugs, or optimize performance.
+Contributions are welcome! If you have suggestions, find bugs, or want to improve the project:
+- **Submit Issues:** [GitHub Issues](https://github.com/FIREPAWER07/SendDisImages/issues)  
+- **Pull Requests:** Fork the repo and send your improvements.
 
 ---
 
@@ -103,13 +98,12 @@ This project is licensed under the **MIT License**. See the [LICENSE](LICENSE) f
 ---
 
 ## 💡 About the Developer
-Hi! I’m **[FIREPAWER07](https://github.com/FIREPAWER07)** — a passionate developer who loves building efficient desktop apps with Rust and Tauri.  
-**SendDisImages** was made to simplify sending multiple images to Discord while keeping things fast, clean, and private.
+I'm a **beginner programmer** who started with no prior experience. I built this project with the help of amazing friends, a bit of AI assistance, and a lot of documentation. I’m excited to keep learning and refining my skills as I work on new updates!
 
 ---
 
 ## 💖 Support Me
-If you like my work and want to help me keep developing projects like this:
+If you appreciate my work and want to support the development of this project, consider buying me a coffee:
 
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/D1D31CKA7D)
 
