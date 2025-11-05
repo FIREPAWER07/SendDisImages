@@ -9,18 +9,39 @@
   <body>
     <div id="app">
       <header class="app-header">
-        <!-- Added logo image to header -->
-        <div class="header-logo">
-          <img src="/src/assets/Logo.png" alt="SendDisImages Logo" class="logo-image" />
+        <!-- Added header container for theme toggle layout -->
+        <div class="header-container">
+          <div class="header-content">
+            <div class="header-logo">
+              <img src="/src/assets/Logo.png" alt="SendDisImages Logo" class="logo-image" />
+            </div>
+            <h1>SendDisImages</h1>
+            <p class="subtitle">Select. Compress. Send!</p>
+          </div>
+          <!-- Added dark/light mode toggle button -->
+          <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme" title="Toggle dark/light mode">
+            <svg class="sun-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="5"></circle>
+              <line x1="12" y1="1" x2="12" y2="3"></line>
+              <line x1="12" y1="21" x2="12" y2="23"></line>
+              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+              <line x1="1" y1="12" x2="3" y2="12"></line>
+              <line x1="21" y1="12" x2="23" y2="12"></line>
+              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+            </svg>
+            <svg class="moon-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+          </button>
         </div>
-        <h1>SendDisImages</h1>
-        <p class="subtitle">Select. Compress. Send!</p>
       </header>
 
       <main class="container">
         <!-- Token Section -->
         <section class="card">
-          <h2>Discord Bot Token</h2>
+          <h2>🔐 Discord Bot Token</h2>
           <div class="input-group">
             <input
               type="password"
@@ -36,7 +57,7 @@
 
         <!-- Added Server & Channel Browser Section -->
         <section class="card" id="channel-browser-section" style="display: none;">
-          <h2>Select Server & Channel</h2>
+          <h2>📡 Select Server & Channel</h2>
           <button id="browse-channels-btn" class="btn btn-primary">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
@@ -81,7 +102,7 @@
 
         <!-- Settings Section -->
         <section class="card">
-          <h2>Settings</h2>
+          <h2>⚙️ Settings</h2>
           <div class="form-group">
             <label class="checkbox-label">
               <input type="checkbox" id="nitro-mode" />
@@ -93,7 +114,7 @@
 
         <!-- Image Selection Section -->
         <section class="card">
-          <h2>Select Images</h2>
+          <h2>🖼️ Select Images</h2>
           <div id="drop-zone" class="drop-zone">
             <svg class="drop-icon" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
@@ -118,7 +139,7 @@
 
         <!-- Send Options Section -->
         <section class="card" id="send-section" style="display: none;">
-          <h2>Send Options</h2>
+          <h2>📤 Send Options</h2>
           <div class="form-group">
             <label class="checkbox-label">
               <input type="checkbox" id="send-separately" />

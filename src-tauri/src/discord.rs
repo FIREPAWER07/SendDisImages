@@ -5,6 +5,8 @@ use std::path::PathBuf;
 use std::sync::Arc;
 use tauri::State;
 
+const DISCORD_MAX_ATTACHMENTS_PER_MESSAGE: usize = 10;
+
 #[derive(Clone)]
 pub struct DiscordClient {
     http: Arc<Http>,
@@ -91,17 +93,24 @@ impl DiscordClient {
                 }
             }
         } else {
-            // Send all images in one message
-            let mut builder = CreateMessage::new();
+            let chunks: Vec<Vec<PathBuf>> = attachments
+                .chunks(DISCORD_MAX_ATTACHMENTS_PER_MESSAGE)
+                .map(|chunk| chunk.to_vec())
+                .collect();
 
-            for path in attachments {
-                let attachment = CreateAttachment::path(&path).await?;
-                builder = builder.add_file(attachment);
-            }
+            for (index, chunk) in chunks.iter().enumerate() {
+                let mut builder = CreateMessage::new();
 
-            match channel.send_message(&self.http, builder).await {
-                Ok(msg) => message_ids.push(msg.id.to_string()),
-                Err(e) => return Err(anyhow!("Failed to send message: {}", e)),
+                // Add all files in this chunk
+                for path in chunk {
+                    let attachment = CreateAttachment::path(&path).await?;
+                    builder = builder.add_file(attachment);
+                }
+
+                match channel.send_message(&self.http, builder).await {
+                    Ok(msg) => message_ids.push(msg.id.to_string()),
+                    Err(e) => return Err(anyhow!("Failed to send message batch {}: {}", index + 1, e)),
+                }
             }
         }
 
@@ -124,6 +133,8 @@ pub struct SendImagesResponse {
     pub message_ids: Vec<String>,
     pub skipped: Vec<String>,
     pub errors: Vec<String>,
+    pub batches_sent: usize,
+    pub total_images: usize,
 }
 
 #[tauri::command]
@@ -208,12 +219,20 @@ pub async fn send_images(
             message_ids: vec![],
             skipped,
             errors,
+            batches_sent: 0,
+            total_images: 0,
         });
     }
 
+    let batches_count = if request.send_separately {
+        valid_paths.len()
+    } else {
+        (valid_paths.len() + DISCORD_MAX_ATTACHMENTS_PER_MESSAGE - 1) / DISCORD_MAX_ATTACHMENTS_PER_MESSAGE
+    };
+
     // Send images
     match client
-        .send_message(channel_id, valid_paths, request.send_separately)
+        .send_message(channel_id, valid_paths.clone(), request.send_separately)
         .await
     {
         Ok(message_ids) => Ok(SendImagesResponse {
@@ -221,6 +240,8 @@ pub async fn send_images(
             message_ids,
             skipped,
             errors,
+            batches_sent: batches_count,
+            total_images: valid_paths.len(),
         }),
         Err(e) => Err(format!("Failed to send images: {}", e)),
     }

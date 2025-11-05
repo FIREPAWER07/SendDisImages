@@ -17,6 +17,85 @@ interface SendImagesResponse {
   message_ids: string[]
   skipped: string[]
   errors: string[]
+  batches_sent: number
+  total_images: number
+}
+
+interface GuildInfo {
+  id: string
+  name: string
+  icon: string | null
+  channels: ChannelInfo[]
+}
+
+interface ChannelInfo {
+  id: string
+  name: string
+  channel_type: string
+}
+
+interface ChannelData {
+  channel_id: string
+  channel_name: string
+  guild_name: string
+}
+
+class ThemeManager {
+  private themeToggleBtn: HTMLElement | null
+  private prefersDark: boolean
+
+  constructor() {
+    this.themeToggleBtn = document.getElementById("theme-toggle")
+    this.prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches
+
+    this.init()
+  }
+
+  private init() {
+    const savedTheme = localStorage.getItem("theme")
+    const initialTheme = savedTheme || (this.prefersDark ? "dark" : "light")
+    this.setTheme(initialTheme as "light" | "dark")
+
+    this.themeToggleBtn?.addEventListener("click", () => this.toggleTheme())
+
+    // Listen for system theme changes
+    window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (e) => {
+      if (!localStorage.getItem("theme")) {
+        this.setTheme(e.matches ? "dark" : "light")
+      }
+    })
+  }
+
+  private setTheme(theme: "light" | "dark") {
+    document.documentElement.setAttribute("data-theme", theme)
+    localStorage.setItem("theme", theme)
+  }
+
+  private toggleTheme() {
+    const currentTheme = document.documentElement.getAttribute("data-theme") || "light"
+    const newTheme = currentTheme === "light" ? "dark" : "light"
+    this.setTheme(newTheme)
+  }
+}
+
+// Initialize theme manager
+new ThemeManager()
+
+interface SendImagesRequest {
+  token: string
+  channel_id: string
+  image_paths: string[]
+  nitro_mode: boolean
+  send_separately: boolean
+}
+
+interface SendImagesResponse {
+  success: boolean
+  message_ids: string[]
+  skipped: string[]
+  errors: string[]
+  batches_sent: number
+  total_images: number
 }
 
 interface GuildInfo {
@@ -116,6 +195,8 @@ class App {
         this.closeChannelBrowser()
       }
     })
+
+    this.sendSeparatelyCheckbox.addEventListener("change", () => this.updateBatchPreview())
   }
 
   private setupPasteHandler() {
@@ -206,7 +287,7 @@ class App {
       await writeFile(filePath, uint8Array)
 
       this.selectedFiles.push(filePath)
-      
+
       // Only show individual status for single images (batch message shown in setupPasteHandler)
       if (this.selectedFiles.length === 1) {
         this.showStatus(`Pasted image added: ${filename}`, "success")
@@ -346,32 +427,29 @@ class App {
 
   private async renderSelectedFiles() {
     if (this.selectedFiles.length === 0) {
-    this.selectedFilesDiv.querySelectorAll(".remove-file").forEach((btn) => {
-      btn.addEventListener("click", (e) => {
-        const index = Number.parseInt((e.currentTarget as HTMLElement).dataset.index || "0")
-        this.removeFile(index)
-      })
-    })
-  }
+      this.selectedFilesDiv.innerHTML = ""
+      this.sendSection.style.display = "none"
+      return
+    }
 
-    // Clear previous object URLs to prevent memory leaks
+    // Clean up previous object URLs to prevent memory leaks
     this.cleanupObjectUrls()
 
-    let html = ''
-    
+    let html = ""
+
     for (let i = 0; i < this.selectedFiles.length; i++) {
       const file = this.selectedFiles[i]
       const fileName = file.split(/[\\/]/).pop() || file
-      
+
       try {
         // Read the file as binary data
         const fileData = await readFile(file)
-        
+
         // Create a blob and object URL
         const blob = new Blob([fileData])
         const objectUrl = URL.createObjectURL(blob)
         this.objectUrls.push(objectUrl)
-        
+
         html += `
           <div class="file-item-preview">
             <div class="file-preview-header">
@@ -389,7 +467,7 @@ class App {
           </div>
         `
       } catch (error) {
-        console.error('Failed to load image preview:', error)
+        console.error("Failed to load image preview:", error)
         // Fallback to placeholder if we can't read the file
         html += `
           <div class="file-item-preview">
@@ -423,15 +501,56 @@ class App {
     this.selectedFilesDiv.querySelectorAll(".remove-file").forEach((btn) => {
       btn.addEventListener("click", (e) => {
         const index = Number.parseInt((e.currentTarget as HTMLElement).dataset.index || "0")
-        this.selectedFiles.splice(index, 1)
-        this.renderSelectedFiles()
+        this.removeFile(index)
       })
     })
+
+    this.updateBatchPreview()
+  }
+
+  private updateBatchPreview() {
+    if (this.selectedFiles.length === 0) {
+      return
+    }
+
+    const sendSeparately = this.sendSeparatelyCheckbox.checked
+    const totalImages = this.selectedFiles.length
+
+    let batchInfo = ""
+
+    if (sendSeparately) {
+      batchInfo = `Will send ${totalImages} separate message${totalImages > 1 ? "s" : ""} (one per image)`
+    } else {
+      const batchCount = Math.ceil(totalImages / 10)
+      if (batchCount === 1) {
+        batchInfo = `Will send 1 message with ${totalImages} image${totalImages > 1 ? "s" : ""}`
+      } else {
+        batchInfo = `Will send ${batchCount} messages (${totalImages} images split into batches of up to 10)`
+      }
+    }
+
+    // Find or create batch info element
+    let batchInfoElement = document.getElementById("batch-info")
+    if (!batchInfoElement) {
+      batchInfoElement = document.createElement("div")
+      batchInfoElement.id = "batch-info"
+      batchInfoElement.className = "batch-info"
+      this.sendSection.insertBefore(batchInfoElement, this.sendBtn)
+    }
+
+    batchInfoElement.innerHTML = `
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"></circle>
+        <line x1="12" y1="16" x2="12" y2="12"></line>
+        <line x1="12" y1="8" x2="12.01" y2="8"></line>
+      </svg>
+      <span>${batchInfo}</span>
+    `
   }
 
   private cleanupObjectUrls() {
     // Clean up previous object URLs to prevent memory leaks
-    this.objectUrls.forEach(url => URL.revokeObjectURL(url))
+    this.objectUrls.forEach((url) => URL.revokeObjectURL(url))
     this.objectUrls = []
   }
 
@@ -508,7 +627,9 @@ class App {
               <span class="channel-count">${textChannels.length} channels</span>
             </div>
             <div class="channels-list">
-              ${textChannels.map((channel) => `
+              ${textChannels
+                .map(
+                  (channel) => `
                 <button class="channel-item" 
                         data-channel-id="${channel.id}" 
                         data-channel-name="${this.escapeHtml(channel.name)}" 
@@ -518,7 +639,9 @@ class App {
                   </svg>
                   ${this.escapeHtml(channel.name)}
                 </button>
-              `).join('')}
+              `,
+                )
+                .join("")}
             </div>
           </div>
         `
@@ -607,7 +730,7 @@ class App {
     } finally {
       this.sendBtn.disabled = false
       this.sendBtn.innerHTML = `
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <line x1="22" y1="2" x2="11" y2="13"></line>
           <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
         </svg>
@@ -621,7 +744,14 @@ class App {
     let statusClass = "success"
 
     if (response.success && response.message_ids.length > 0) {
-      html += `<p class="status-success">✓ Successfully sent ${response.message_ids.length} message(s)</p>`
+      const batchText = response.batches_sent === 1 ? "1 message" : `${response.batches_sent} messages`
+      const imageText = response.total_images === 1 ? "1 image" : `${response.total_images} images`
+
+      html += `<p class="status-success">✓ Successfully sent ${imageText} in ${batchText}</p>`
+
+      if (response.batches_sent > 1 && !this.sendSeparatelyCheckbox.checked) {
+        html += `<p class="status-info">📦 Images were automatically split into batches of up to 10 per message</p>`
+      }
     }
 
     if (response.skipped.length > 0) {
