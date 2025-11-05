@@ -7,12 +7,15 @@
 [![License](https://img.shields.io/github/license/FIREPAWER07/SendDisImages.svg)](LICENSE)
 [![Powered by Tauri](https://img.shields.io/badge/powered%20by-tauri-5f5fff.svg)](https://tauri.app/)
 [![Made with Rust](https://img.shields.io/badge/made%20with-rust-orange.svg)](https://www.rust-lang.org/)
-[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/YOURKOFI)
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/D1D31CKA7D)
 
 A **modern, lightweight, and efficient Discord Bot GUI** built with [Tauri](https://tauri.app/).  
-**SendDisImages** allows you to easily send one or multiple high-quality images to Discord channels through your bot — automatically compressing them, respecting Nitro limits, and minimizing system resource usage.
+**SendDisImages** lets you send one or multiple high-quality images to Discord channels through your bot — automatically compressing them, respecting Nitro limits, and running entirely locally with minimal CPU, GPU, and RAM usage.
 
-> ⚠ **Disclaimer:** This project is **not affiliated with or endorsed by Discord**. Use at your own discretion.
+> ⚠ **Disclaimer:**  
+> This project is **not affiliated, associated, or endorsed by Discord** in any way.  
+> The developer (**FIREPAWER07**) is **not responsible for any misuse, violations, or damages** caused by the use of this application.  
+> Use responsibly and in accordance with Discord’s [Terms of Service](https://discord.com/terms) and [Developer Policies](https://discord.com/developers/docs/policies-and-agreements).
 
 ---
 
@@ -32,49 +35,53 @@ A **modern, lightweight, and efficient Discord Bot GUI** built with [Tauri](http
 ---
 
 ## 🚀 Features
-- 🖼 **Send Images to Discord Channels** directly from a local GUI.
-- 🔁 **Multiple Upload Modes:** choose to send all images in one message or individually.
-- 🧠 **Smart Compression:** uses `mozjpeg` (JPEG) and `oxipng` (PNG) for near-lossless results.
-- ⚙️ **Nitro Mode:** dynamically adjusts max upload size (10 MB off / 500 MB on).
-- 🔐 **Secure Token Storage:** remembers your bot token between sessions.
-- 💨 **Lightweight & Fast:** powered by Tauri + Rust for minimal CPU, GPU, and RAM usage.
-- 🎨 **Modern UI:** built with React + TailwindCSS for a clean, responsive look.
-- 🌐 **Fully Local:** runs offline; only connects to Discord’s API for uploads.
+- 🖼 **Send Images to Discord Channels** directly from a sleek local GUI.  
+- 🔁 **Batch Upload Option** – choose to send all images in one message or separately.  
+- 🧠 **Near-Lossless Compression** – uses `mozjpeg` and `oxipng` to minimize size without visible quality loss.  
+- ⚙️ **Nitro Mode Toggle** – automatically adjusts max upload limit:  
+  - Normal Mode → 10 MB/image  
+  - Nitro Mode → 500 MB/image  
+- 🔐 **Secure Token Memory** – remembers your Discord bot token between sessions.  
+- 💨 **Lightweight & Fast** – built with Tauri + Rust for minimal system resource usage.  
+- 🎨 **Modern UI** – clean, responsive React + TailwindCSS interface.  
+- 🌐 **Fully Local** – no external servers, only Discord API connections.
 
 ---
 
 ## 🛠 Installation
 
 ### 📦 Download
-Grab the latest version from the **[Releases](https://github.com/FIREPAWER07/SendDisImages/releases)** page.
+Get the latest version from the **[Releases](https://github.com/FIREPAWER07/SendDisImages/releases)** page.
 
 ### ▶ Run
-- **Windows:** Run the `.exe` file.  
-- **macOS/Linux:** coming soon!
+- **Windows:** Run the `.exe` installer.  
+- *(macOS & Linux support coming soon!)*
 
 ---
 
 ## 💡 Usage
-1. Launch **SendDisImages**.  
-2. Enter your **Discord Bot Token** (it will be remembered securely).  
-3. Set your **Channel ID**.  
-4. Toggle **Nitro Mode** if needed.  
-5. Select one or more images.  
-6. When prompted, choose to send all in one message or separately.  
-7. Click **Send** — compressed images are uploaded automatically!
+1. Open **SendDisImages**.  
+2. Enter your **Discord Bot Token** (it’s saved securely for next time).  
+3. Enter your **Channel ID**.  
+4. Toggle **Nitro Mode** as needed.  
+5. Select one or multiple images.  
+6. Choose whether to send them **all in one message** or **individually**.  
+7. Click **Send** — the app compresses and uploads automatically!  
 
 ---
 
 ## ❗ Known Issues
-- ⚠ Discord API limits may restrict message frequency for large batches.  
-- 🐧 Linux/macOS builds are still experimental.
+- ⚠ Large image batches may hit Discord rate limits.  
+- 🐧 Linux/macOS builds not fully tested yet.
 
 ---
 
 ## 🔮 Planned Updates
-- ✅ Full macOS/Linux support  
-- 🌈 UI customization options  
-- 🚀 Batch sending optimizations  
+- 💻 macOS/Linux support  
+- 🔐 Encrypted token storage  
+- 🌈 UI customization themes  
+- ⚡ Batch sending improvements  
+- 📤 Drag-and-drop file upload  
 
 ---
 
@@ -84,27 +91,27 @@ Grab the latest version from the **[Releases](https://github.com/FIREPAWER07/Sen
 ---
 
 ## 🤝 Contributing
-Contributions are welcome!  
-- Open an issue: [GitHub Issues](https://github.com/FIREPAWER07/SendDisImages/issues)  
-- Submit a Pull Request with improvements or fixes.
+Want to help? Contributions are always welcome!  
+- Open an issue → [GitHub Issues](https://github.com/FIREPAWER07/SendDisImages/issues)  
+- Submit a Pull Request to improve features, fix bugs, or optimize performance.
 
 ---
 
 ## 📜 License
-This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for details.
+This project is licensed under the **MIT License**. See the [LICENSE](LICENSE) file for details.
 
 ---
 
 ## 💡 About the Developer
-I’m a passionate developer who loves building clean, efficient desktop tools using Rust and modern web tech.  
-**SendDisImages** was created to simplify sending large or multiple images through Discord while keeping performance top-notch.
+Hi! I’m **[FIREPAWER07](https://github.com/FIREPAWER07)** — a passionate developer who loves building efficient desktop apps with Rust and Tauri.  
+**SendDisImages** was made to simplify sending multiple images to Discord while keeping things fast, clean, and private.
 
 ---
 
 ## 💖 Support Me
-If you enjoy this project and want to support its development, you can buy me a coffee:
+If you like my work and want to help me keep developing projects like this:
 
-[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/YOURKOFI)
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/D1D31CKA7D)
 
 ---
 
@@ -113,18 +120,18 @@ If you enjoy this project and want to support its development, you can buy me a 
 
 ---
 
-## ⚙️ Other Projects
-### 🔥 ExampleProject  
+## ⚙️ Other Projects by Me
+### 🎵 [Spicetify Installer](https://github.com/FIREPAWER07/SpicetifyInstaller)
 <table>
   <tr>
     <td width="200">
-      <a href="https://github.com/YOURNAME/ExampleProject">
-        <img src="https://i.imgur.com/EXAMPLE.png" alt="ExampleProject Logo" width="180">
+      <a href="https://github.com/FIREPAWER07/SpicetifyInstaller">
+        <img src="https://i.imgur.com/aVn70EB.png" alt="Spicetify Installer Banner" width="180">
       </a>
     </td>
     <td>
-      A small demo of another modern Tauri-based tool.<br><br>
-      🔗 <a href="https://github.com/YOURNAME/ExampleProject">Check it out here!</a>
+      A Tauri-based **Spicetify Installer** for seamless Spotify customization — simple, safe, and fast.<br><br>
+      🔗 <a href="https://github.com/FIREPAWER07/SpicetifyInstaller">View Repository</a>
     </td>
   </tr>
 </table>
