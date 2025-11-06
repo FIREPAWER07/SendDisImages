@@ -6,7 +6,6 @@
 [![GitHub issues](https://img.shields.io/github/issues/FIREPAWER07/SendDisImages.svg)](https://github.com/FIREPAWER07/SendDisImages/issues)
 [![License](https://img.shields.io/github/license/FIREPAWER07/SendDisImages.svg)](LICENSE)
 [![Powered by Tauri](https://img.shields.io/badge/powered%20by-tauri-5f5fff.svg)](https://tauri.app/)
-[![Made with Rust](https://img.shields.io/badge/made%20with-rust-orange.svg)](https://www.rust-lang.org/)
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/D1D31CKA7D)
 
 A **modern, lightweight, and efficient Discord Bot GUI** built with [Tauri](https://tauri.app/).  
