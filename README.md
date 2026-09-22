@@ -145,7 +145,7 @@ If you appreciate my work and want to support the development of this project, c
       A modern, interactive web app designed for degenerates who want to explore, track, and share their personal preferences—with style, efficiency, and full customization.  
       <br><br>
       🔗 <a href="https://github.com/FIREPAWER07/OmniKinkList">Check it out here!</a>
-      🔗 <a href="https://FIREPAWER07.github.io/OmniKinkList/">Check the Live Demo!</a>
+      🔗 <a href="https://omnikinklist.netlify.app/">Check the Live Demo!</a>
     </td>
   </tr>
 </table>
