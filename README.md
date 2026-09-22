@@ -9,7 +9,7 @@
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/D1D31CKA7D)
 
 A **modern, lightweight, and efficient Discord Bot GUI** built with [Tauri](https://tauri.app/).  
-**SendDisImages** lets you send one or multiple high-quality images to Discord channels through your bot — automatically compressing them, respecting Nitro limits, and running entirely locally with minimal CPU, GPU, and RAM usage.
+**SendDisImages** lets you send one or multiple high-quality images to Discord channels through your bot — automatically compressing them and running entirely locally with minimal CPU, GPU, and RAM usage.
 
 > ⚠ **Disclaimer:**  
 > This project is **not affiliated, associated, or endorsed by Discord** in any way.  
