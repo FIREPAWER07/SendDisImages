@@ -37,9 +37,6 @@ A **modern, lightweight, and efficient Discord Bot GUI** built with [Tauri](http
 - 🖼 **Send Images to Discord Channels** directly from a sleek local GUI.  
 - 🔁 **Batch Upload Option** – choose to send all images in one message or separately.  
 - 🧠 **Near-Lossless Compression** – uses `mozjpeg` and `oxipng` to minimize size without visible quality loss.  
-- ⚙️ **Nitro Mode Toggle** – automatically adjusts max upload limit:  
-  - Normal Mode → 10 MB/image  
-  - Nitro Mode → 500 MB/image  
 - 🔐 **Secure Token Memory** – remembers your Discord bot token between sessions.  
 - 💨 **Lightweight & Fast** – built with Tauri + Rust for minimal system resource usage.  
 - 🎨 **Modern UI** – clean, responsive React + TailwindCSS interface.  
@@ -61,11 +58,10 @@ Get the latest version from the **[Releases](https://github.com/FIREPAWER07/Send
 ## 💡 Usage
 1. Open **SendDisImages**.  
 2. Enter your [**Discord Bot Token**](https://discord.com/developers/applications) (it’s saved securely for next time).  
-3. Select the **Channel**.  
-4. Toggle **Nitro Mode** as needed.  
-5. Select one or multiple images.  
-6. Choose whether to send them **all in one message** or **individually**.  
-7. Click **Send** — the app compresses and uploads automatically!  
+3. Select the **Channel**.    
+4. Select one or multiple images.  
+5. Choose whether to send them **all in one message** or **individually**.  
+6. Click **Send** — the app compresses and uploads automatically!  
 
 ---
 
